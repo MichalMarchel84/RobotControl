@@ -1,0 +1,9 @@
+{
+  "name": "pl.marchel.robotcontrol",
+  "description": "Controlling robot hardware",
+  "path": "/home/falcon/Kurs/WebControl/RobotComm/control.sh",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://ngdeingdfjcpcbilfpmohoegahhemjnd/"
+  ]
+}
