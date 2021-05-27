@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 public class RobotMotion implements Runnable{
 
-    private Motor leftMotor = new Motor(RaspiPin.GPIO_24, RaspiPin.GPIO_25);
-    private Motor rightMotor = new Motor(RaspiPin.GPIO_27, RaspiPin.GPIO_28);
+    private Motor leftMotor = new Motor(RaspiPin.GPIO_25, RaspiPin.GPIO_24);
+    private Motor rightMotor = new Motor(RaspiPin.GPIO_28, RaspiPin.GPIO_27);
     private final int[] motorCommands = new int[2];
 
     public void forward(){
