@@ -1,12 +1,19 @@
 const port = chrome.runtime.connectNative("pl.marchel.robotcontrol");
+const host = 'https://remote-control-project.herokuapp.com/endpoint'
 const signallingHost = "/app/signalling";
 const reportingHost = "/app/reports";
-const configuration = null;
-let stompClient;
-let timeout;
-let peerConnection;
-let dataChannel;
-let stream;
+const configuration = {
+    iceServers: [
+        {url: "stun:stun.l.google.com:19302"},
+        {url: 'stun:stun1.l.google.com:19302'},
+        {url: 'stun:stun2.l.google.com:19302'},
+        {url: 'stun:stun3.l.google.com:19302'}
+        ]
+};
+let stompClient = null;
+let peerConnection = null;
+let dataChannel = null;
+let stream = null;
 
 port.onMessage.addListener(onNativeMessage);
 
@@ -20,7 +27,7 @@ function onNativeMessage(message) {
 
 function connect() {
 
-    const socket = new SockJS('http://192.168.1.12:8080/endpoint');
+    const socket = new SockJS(host);
     stompClient = Stomp.over(socket);
     stompClient.connect({},
         function (frame) {
@@ -55,13 +62,12 @@ function onMessage(msg) {
         peerConnection.createAnswer(function (answer) {
             peerConnection.setLocalDescription(answer);
             send("answer", answer);
-        }, function (error) {
-            console.log(error)
+        }, function (error){
+            console.log(error);
         });
     } else if (msg.type === "answer") {
         peerConnection.setRemoteDescription(new RTCSessionDescription(msg.data));
     } else if (msg.type === "start") {
-        timeout = window.setTimeout(signallingTimeout, 10000);
         startTransmission();
     }
 }
@@ -75,6 +81,7 @@ function initializePeerConnection() {
     };
 
     peerConnection.onconnectionstatechange = function (event) {
+        console.log(event)
         switch (peerConnection.connectionState) {
             case "connected":
                 onConnect();
@@ -89,6 +96,11 @@ function initializePeerConnection() {
                 break;
         }
     };
+
+    // peerConnection.onnegotiationneeded = async () => {
+    //     await peerConnection.setLocalDescription(await peerConnection.createOffer());
+    //     send("offer", peerConnection.localDescription);
+    // };
 }
 
 function finalizePeerConnection() {
@@ -105,12 +117,7 @@ function finalizePeerConnection() {
 }
 
 function onConnect() {
-    window.clearTimeout(timeout);
     report("connect", "");
-}
-
-function signallingTimeout() {
-    report("timeout", "");
 }
 
 async function startVideo() {
