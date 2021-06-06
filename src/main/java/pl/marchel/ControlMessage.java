@@ -1,17 +1,10 @@
 package pl.marchel;
 
+import lombok.Data;
+
+@Data
 public class ControlMessage {
 
-    private String[] keys;
-
-    public ControlMessage() {
-    }
-
-    public String[] getKeys() {
-        return keys;
-    }
-
-    public void setKeys(String[] keys) {
-        this.keys = keys;
-    }
+    private String type;
+    private String[] data;
 }
