@@ -16,7 +16,7 @@ public class App {
         keys.add(new ConfigParam("Left", "a", robotMotion::left));
         keys.add(new ConfigParam("Right", "d", robotMotion::right));
         Configuration keyboard = new Configuration("Movement controls", keys, robotMotion);
-        keyHandler.setConfiguration(keyboard);
+        keyHandler.addConfiguration(keyboard);
 
         List<Configurable> configurables = Arrays.asList(keyHandler);
         List<Executable> executables = Arrays.asList(keyHandler);

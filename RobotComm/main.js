@@ -15,9 +15,9 @@ const configuration = {
 const videoConfig = {
     "name": "Video configuration",
     "params": [
-        {"name": "width", "value": 1200},
-        {"name": "height", "value": 720},
-        {"name": "frame rate", "value": 10}
+        {"name": "width", "value": "1200"},
+        {"name": "height", "value": "720"},
+        {"name": "frame rate", "value": "10"}
     ]
 }
 let nativeConfig = [videoConfig];
@@ -158,9 +158,12 @@ async function startVideo() {
     const constraints = {
         audio: false,
         video: {
-            width: videoConfig.params[0].value,
-            height: videoConfig.params[0].value,
-            frameRate: videoConfig.params[0].value
+            // width: videoConfig.params[0].value,
+            // height: videoConfig.params[0].value,
+            // frameRate: videoConfig.params[0].value
+            width: 1200,
+            height: 720,
+            frameRate: 10
         }
     };
     stream = await navigator.mediaDevices.getUserMedia(constraints);
