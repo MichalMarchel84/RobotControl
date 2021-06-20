@@ -27,7 +27,8 @@ async function launchNetwork() {
         args:
             ['--use-fake-ui-for-media-stream',
             '--disable-extensions',
-            '--disable-plugins']
+            '--disable-plugins',
+            '--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
     await page.exposeFunction('sendToCore', onMessage);
@@ -53,31 +54,31 @@ function onMessage(msg) {
 
 //---------Robot control code----------
 
-const Gpio = require('onoff').Gpio;
+const Gpio = require('pigpio').Gpio;
 
 class Motor {
 
     constructor(pin1, pin2) {
-        this.pin1 = new Gpio(pin1, 'out');
-        this.pin2 = new Gpio(pin2, 'out');
+        this.pin1 = new Gpio(pin1, {mode: Gpio.OUTPUT});
+        this.pin2 = new Gpio(pin2, {mode: Gpio.OUTPUT});
         this.timer = null;
     }
 
     run(dir) {
         if (dir > 0) {
             clearTimeout(this.timer);
-            this.pin1.writeSync(1);
-            this.pin2.writeSync(0);
+            this.pin1.digitalWrite(1);
+            this.pin2.digitalWrite(0);
             this.timer = setTimeout(() => this.run(0), 1000);
         } else if (dir < 0) {
             clearTimeout(this.timer);
-            this.pin1.writeSync(0);
-            this.pin2.writeSync(1);
+            this.pin1.digitalWrite(0);
+            this.pin2.digitalWrite(1);
             this.timer = setTimeout(() => this.run(0), 1000);
         } else {
             clearTimeout(this.timer);
-            this.pin1.writeSync(1);
-            this.pin2.writeSync(1);
+            this.pin1.digitalWrite(1);
+            this.pin2.digitalWrite(1);
         }
     }
 }
