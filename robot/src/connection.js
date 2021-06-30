@@ -1,5 +1,4 @@
-const host = 'http://192.168.1.12:8080/endpoint'
-//const host = 'https://remote-control-project.herokuapp.com/endpoint';
+const host = 'https://remote-control-project.herokuapp.com/endpoint';
 const signallingHost = "/app/signalling";
 const reportingHost = "/app/reports";
 const configHost = "/app/config";
@@ -145,7 +144,7 @@ function onConnect() {
     report("connected", "Connected");
     logCore("Client connected");
     notifyCore({type: 'connected'});
-    setTimeout(() => {
+    testRunTimeout = setTimeout(() => {
         logCore("test run timeout");
         disconnect("Test run timed out")
     }, 300000);
